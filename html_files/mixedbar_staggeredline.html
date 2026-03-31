@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>ZingSoft Demo</title>
+  <script nonce="undefined" src="https://cdn.zingchart.com/zingchart.min.js"></script>
+  <style>
+    .chart--container {
+      width: 100%;
+      height: 100%;
+      min-height: 530px;
+    }
+
+    .zc-ref {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="myChart" class="chart--container">
+    <a class="zc-ref" href="https://www.zingchart.com/">Powered by ZingChart</a>
+  </div>
+  <script>
+    ZC.LICENSE = ["569d52cefae586f634c54f86dc99e6a9", "b55b025e438fa8a98e32482b5f768ff5"];
+    let chartConfig = {
+      type: 'mixed',
+      backgroundColor: '#fff',
+      borderColor: '#999',
+      borderWidth: '1px',
+      legend: {
+        margin: 'auto auto 10px auto',
+        backgroundColor: 'none',
+        borderWidth: '0px',
+        layout: 'float',
+        marker: {
+          type: 'match',
+          shadow: false,
+          showLine: true,
+        },
+      },
+      plot: {
+        dataDragging: true,
+        hoverState: {
+          visible: false,
+        },
+      },
+      plotarea: {
+        margin: '30px 60px 90px 60px',
+      },
+      scaleX: {
+        values: [
+          'XA2011Q1',
+          'XA2011Q2',
+          'XA2011Q3',
+          'XA2011Q4',
+          'XA2012Q1',
+          'XA2012Q2',
+          'XA2012Q3',
+          'XA2012Q4',
+          'XA2013Q1',
+          'XA2013Q2',
+          'XA2013Q3',
+          'XA2013Q4',
+          'XA2014Q1',
+          'XA2014Q2',
+          'XA201343',
+          'XA2014Q4',
+        ],
+        guide: {
+          visible: false,
+        },
+        item: {
+          rules: [{
+              offsetY: '0px',
+              rule: '%i%2==0',
+            },
+            {
+              offsetY: '18px',
+              rule: '%i%2==1',
+            },
+          ],
+        },
+        itemsOverlap: true,
+        lineColor: '#999',
+        lineWidth: '1px',
+        maxItems: 9999,
+        tick: {
+          lineColor: '#999',
+          lineWidth: '1px',
+          placement: 'inner',
+        },
+      },
+      scaleY: {
+        guide: {
+          alpha: 1,
+          lineColor: '#999',
+          lineStyle: 'solid',
+        },
+        lineColor: '#999',
+        lineWidth: '1px',
+        stackType: '100%',
+        tick: {
+          lineColor: '#999',
+          lineWidth: '1px',
+        },
+      },
+      scaleY2: {
+        format: '$%v',
+        guide: {
+          visible: false,
+        },
+        lineColor: '#999',
+        lineWidth: '1px',
+        thousandsSeparator: ',',
+        tick: {
+          lineColor: '#999',
+          lineWidth: '1px',
+        },
+      },
+      series: [{
+          type: 'bar',
+          text: 'Base %',
+          values: [13, 19, 24, 12, 18, 10, 11, 25, 23, 24, 26, 39, 37, 31, 27, 27],
+          tooltip: {
+            text: '%node-value (%node-percent-value%)',
+            decimals: 1,
+          },
+          backgroundColor: '#14314F',
+          barWidth: '50%',
+          dataDraggingMinValue: 10,
+          legendMarker: {
+            borderWidth: '0px',
+            shadow: false,
+          },
+          scales: 'scale-x,scale-y',
+          stack: 1,
+          stacked: true,
+          stackType: '100%',
+        },
+        {
+          type: 'bar',
+          text: 'Custom %',
+          values: [20, 31, 18, 28, 36, 19, 27, 28, 30, 22, 15, 13, 21, 12, 17, 18],
+          tooltip: {
+            text: '%node-value (%node-percent-value%)',
+            decimals: 1,
+          },
+          backgroundColor: '#65A1DF',
+          barWidth: '50%',
+          dataDraggingMinValue: 10,
+          legendMarker: {
+            borderWidth: '0px',
+            shadow: false,
+          },
+          scales: 'scale-x,scale-y',
+          stack: 1,
+          stacked: true,
+          stackType: '100%',
+        },
+        {
+          type: 'line',
+          text: 'Base XA',
+          values: [
+            3500, 3700, 4300, 4000, 4050, 4100, 4300, 4250, 4200, 5000, 5500, 5100,
+            4900, 4400, 4600, 4500,
+          ],
+          tooltip: {
+            text: '$%node-value',
+            thousandsSeparator: ',',
+          },
+          lineColor: '#CBCFD8',
+          lineWidth: '2px',
+          marker: {
+            type: 'rpoly3',
+            backgroundColor: '#CBCFD8',
+            borderWidth: '0px',
+            shadow: false,
+            size: '7px',
+          },
+          scales: 'scale-x,scale-y-2',
+          shadow: false,
+        },
+        {
+          type: 'line',
+          text: 'Custom XA',
+          values: [
+            5600, 4300, 4100, 4800, 5400, 5100, 5050, 5450, 5050, 4800, 4700, 4750,
+            4500, 4200, 4700, 4800,
+          ],
+          tooltip: {
+            text: '$%node-value',
+            thousandsSeparator: ',',
+          },
+          lineColor: '#AB735C',
+          lineWidth: '2px',
+          marker: {
+            type: 'square',
+            backgroundColor: '#AB735C',
+            borderWidth: '0px',
+            shadow: false,
+            size: '5px',
+          },
+          scales: 'scale-x,scale-y-2',
+          shadow: false,
+        },
+        {
+          type: 'line',
+          text: 'Total XA',
+          values: [
+            6700, 7200, 6800, 6400, 5500, 6200, 5800, 5600, 5000, 5100, 7100, 6500,
+            5800, 4900, 4400, 4300,
+          ],
+          tooltip: {
+            text: '$%node-value',
+            thousandsSeparator: ',',
+          },
+          lineColor: '#A7B872',
+          lineWidth: '2px',
+          marker: {
+            type: 'plus',
+            lineColor: '#A7B872',
+            lineWidth: '2px',
+            shadow: false,
+            size: '5px',
+          },
+          scales: 'scale-x,scale-y-2',
+          shadow: false,
+        },
+      ],
+    };
+
+    zingchart.render({
+      id: 'myChart',
+      data: chartConfig,
+      height: '100%',
+      width: '100%',
+    });
+  </script>
+</body>
+
+</html>
