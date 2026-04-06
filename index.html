@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Composite Viz Gallery</title>
+  <title>VizPilot</title>
   <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Fraunces:ital,wght@0,300;0,600;0,800;1,300&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -27,76 +27,327 @@
       overflow-x: hidden;
     }
 
+    /* ── HEADER ── */
     header {
-      padding: 4rem 3rem 2.5rem;
+      padding: 0 3rem;
       border-bottom: 1px solid var(--border);
       display: flex;
-      align-items: flex-end;
+      align-items: stretch;
       justify-content: space-between;
-      gap: 2rem;
-      flex-wrap: wrap;
-      animation: fadeDown 0.8s ease both;
+      gap: 0;
+      height: 56px;
     }
 
-    .header-left h1 {
-      font-size: clamp(2.2rem, 5vw, 3.8rem);
+    .logo {
+      font-size: 1.1rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      padding-right: 2rem;
+      flex-shrink: 0;
+    }
+    .logo em { font-style: italic; font-weight: 300; color: var(--accent); }
+
+    /* ── TABS in header ── */
+    .tabs {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      border-left: 1px solid var(--border);
+      flex: 1;
+    }
+
+    .tab-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.67rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      background: none;
+      border: none;
+      border-right: 1px solid var(--border);
+      padding: 0 1.6rem;
+      cursor: pointer;
+      transition: color 0.2s, background 0.2s;
+      position: relative;
+      white-space: nowrap;
+    }
+
+    .tab-btn:hover { color: var(--text); background: #faf9f7; }
+
+    .tab-btn.active {
+      color: var(--accent);
+      background: var(--accent-light);
+    }
+
+    .tab-btn.active::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--accent);
+    }
+
+    /* ── PANELS ── */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; animation: fadeUp 0.45s ease both; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ══════════════════════════════════
+       ABOUT TAB — description top, features below
+    ══════════════════════════════════ */
+    .about-wrap {
+      display: flex;
+      flex-direction: column;
+      min-height: calc(100vh - 56px);
+    }
+
+    /* Top half: description */
+    .about-top {
+      padding: 4rem 3rem 3rem;
+      border-bottom: 1px solid var(--border);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+    }
+
+    .eyebrow {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.63rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      margin-bottom: 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+    .eyebrow::before {
+      content: '';
+      width: 18px; height: 1px;
+      background: var(--accent);
+      display: inline-block;
+    }
+
+    .about-top h1 {
+      font-size: clamp(1.4rem, 2.2vw, 2rem);
       font-weight: 800;
       letter-spacing: -0.03em;
-      line-height: 1;
-      color: var(--text);
+      line-height: 1.25;
+      margin-bottom: 1.5rem;
     }
-
-    .header-left h1 em {
+    .about-top h1 em {
       font-style: italic;
       font-weight: 300;
       color: var(--accent);
+      display: inline;
     }
 
-    .header-left p {
-      margin-top: 0.75rem;
+    .about-top .description {
+      font-size: 1rem;
+      font-weight: 300;
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+    }
+    .about-top .description strong { font-weight: 600; }
+
+    .about-note {
       font-family: 'DM Mono', monospace;
-      font-size: 0.72rem;
+      font-size: 0.63rem;
       color: var(--muted);
-      letter-spacing: 0.08em;
+      line-height: 1.75;
+      border-left: 2px solid var(--border);
+      padding-left: 1rem;
+    }
+
+    /* Bottom half: 4 feature items in a row */
+    .about-features {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+
+    .feature-item {
+      padding: 2rem 2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      border-right: 1px solid var(--border);
+    }
+    .feature-item:last-child { border-right: none; }
+
+    .fi-icon {
+      width: 36px; height: 36px;
+      background: var(--accent-light);
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: var(--accent);
+    }
+
+    .fi-text h4 {
+      font-size: 0.9rem;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      margin-bottom: 0.3rem;
+    }
+    .fi-text p {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.62rem;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ══════════════════════════════════
+       DEMO TAB — video + steps side by side
+    ══════════════════════════════════ */
+    .demo-wrap {
+      padding: 4rem 3rem;
+    }
+
+    .demo-wrap h2 {
+      font-size: clamp(1.9rem, 4vw, 3rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      margin-bottom: 0.75rem;
+    }
+    .demo-wrap h2 em { font-style: italic; font-weight: 300; color: var(--accent); }
+
+    .demo-desc {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.69rem;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 580px;
+      margin-bottom: 2.5rem;
+    }
+
+    /* Side-by-side layout */
+    .demo-main {
+      display: grid;
+      grid-template-columns: 1fr 280px;
+      gap: 0;
+      border: 1px solid var(--border);
+    }
+
+    .video-container {
+      aspect-ratio: 16/9;
+      background: #ece8e2;
+      position: relative;
+      overflow: hidden;
+    }
+    .video-container iframe { width: 100%; height: 100%; border: none; display: block; }
+
+    .video-placeholder {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 1rem;
+      background: linear-gradient(135deg, #ede8e1 0%, #e4ddd5 100%);
+    }
+    .play-ring {
+      width: 60px; height: 60px;
+      border: 1.5px solid var(--accent);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent);
+    }
+    .video-placeholder p {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.67rem;
+      color: var(--muted);
+      letter-spacing: 0.07em;
+    }
+
+    /* Steps panel beside video */
+    .how-steps {
+      display: flex;
+      flex-direction: column;
+      border-left: 1px solid var(--border);
+    }
+    .step-item {
+      padding: 1.4rem 1.5rem;
+      border-bottom: 1px solid var(--border);
+      flex: 1;
+    }
+    .step-item:last-child { border-bottom: none; }
+    .step-num {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.57rem;
+      color: var(--accent);
+      letter-spacing: 0.12em;
       text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+    .step-item h5 { font-size: 0.88rem; font-weight: 600; letter-spacing: -0.01em; margin-bottom: 0.3rem; }
+    .step-item p { font-family: 'DM Mono', monospace; font-size: 0.61rem; color: var(--muted); line-height: 1.65; }
+
+    /* ══════════════════════════════════
+       GALLERY TAB
+    ══════════════════════════════════ */
+    .gallery-wrap { padding: 3rem; }
+
+    .gallery-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .gallery-top h2 { font-size: clamp(1.5rem, 3vw, 2.2rem); font-weight: 800; letter-spacing: -0.03em; }
+    .gallery-top h2 em { font-style: italic; font-weight: 300; color: var(--accent); }
+
+    .gallery-top-right {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
     }
 
     .count-badge {
       font-family: 'DM Mono', monospace;
-      font-size: 0.68rem;
+      font-size: 0.63rem;
       color: var(--accent);
       border: 1px solid var(--accent);
-      padding: 0.4rem 1rem;
+      padding: 0.35rem 0.9rem;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      white-space: nowrap;
       background: var(--accent-light);
+      white-space: nowrap;
     }
 
-
-    /* New Extension Button */
     .download-btn {
       font-family: 'DM Mono', monospace;
-      font-size: 0.7rem;
+      font-size: 0.66rem;
       background: var(--text);
       color: white;
       border: none;
-      padding: 0.6rem 1.2rem;
+      padding: 0.5rem 1rem;
       cursor: pointer;
       text-transform: uppercase;
       letter-spacing: 0.1em;
       transition: opacity 0.2s;
       display: flex;
       align-items: center;
-      gap: 0.5rem;
+      gap: 0.45rem;
+      white-space: nowrap;
     }
-
-    .download-btn:hover { opacity: 0.9; }
-    main { padding: 3rem; }
+    .download-btn:hover { opacity: 0.82; }
 
     .gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(310px, 1fr));
       gap: 1px;
       background: var(--border);
       border: 1px solid var(--border);
@@ -104,595 +355,758 @@
 
     .card {
       background: var(--surface);
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow: hidden;
+      display: flex; flex-direction: column;
+      position: relative; overflow: hidden;
       transition: box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-      animation: fadeUp 0.7s ease both;
     }
-
-    .card:nth-child(1) { animation-delay: 0.05s; }
-    .card:nth-child(2) { animation-delay: 0.1s; }
-    .card:nth-child(3) { animation-delay: 0.15s; }
-    .card:nth-child(4) { animation-delay: 0.2s; }
-    .card:nth-child(5) { animation-delay: 0.25s; }
-    .card:nth-child(6) { animation-delay: 0.3s; }
-
     .card:hover {
       transform: translateY(-3px);
       box-shadow: 0 12px 40px rgba(0,0,0,0.08);
       z-index: 10;
     }
-
     .card:hover .card-img img { transform: scale(1.04); }
-    .card:hover .open-btn { background: var(--accent); color: #fff; }
 
     .card-img {
-      width: 100%;
-      aspect-ratio: 16 / 10;
-      overflow: hidden;
-      background: #ece8e2;
-      position: relative;
+      width: 100%; aspect-ratio: 16/10;
+      overflow: hidden; background: #ece8e2; position: relative;
     }
-
     .card-img img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
+      width: 100%; height: 100%; object-fit: cover;
       transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
-      display: block;
-      position: relative; /* Add this */
-      z-index: 2;        /* Add this to lift it above the placeholder */
+      display: block; position: relative; z-index: 2;
     }
-
     .card-img .placeholder {
-      width: 100%;
-      height: 100%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 100%; height: 100%;
+      display: flex; align-items: center; justify-content: center;
       background: linear-gradient(135deg, #ede8e1 0%, #e4ddd5 100%);
-      position: absolute;
-      inset: 0;
-      z-index: 1;
+      position: absolute; inset: 0; z-index: 1;
     }
-
     .placeholder svg { opacity: 0.25; width: 52px; height: 52px; }
 
     .index-tag {
-      position: absolute;
-      top: 0.75rem;
-      left: 0.75rem;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.62rem;
-      background: var(--tag-bg);
-      border: 1px solid var(--border);
-      color: var(--muted);
-      padding: 0.2rem 0.5rem;
-      letter-spacing: 0.1em;
-      backdrop-filter: blur(6px);
+      position: absolute; top: 0.75rem; left: 0.75rem;
+      font-family: 'DM Mono', monospace; font-size: 0.62rem;
+      background: var(--tag-bg); border: 1px solid var(--border);
+      color: var(--muted); padding: 0.2rem 0.5rem;
+      letter-spacing: 0.1em; backdrop-filter: blur(6px); z-index: 3;
     }
 
     .card-body {
       padding: 1.25rem 1.5rem 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem;
-      flex: 1;
+      display: flex; flex-direction: column;
+      gap: 0.4rem; flex: 1;
       border-top: 1px solid var(--border);
     }
+    .card-body h3 { font-size: 1.03rem; font-weight: 600; letter-spacing: -0.01em; line-height: 1.3; }
 
-    .card-body h3 {
-      font-size: 1.05rem;
-      font-weight: 600;
-      letter-spacing: -0.01em;
-      line-height: 1.3;
-      color: var(--text);
-    }
-
-    .card-body p {
-      font-family: 'DM Mono', monospace;
-      font-size: 0.68rem;
-      color: var(--muted);
-      line-height: 1.65;
-      flex: 1;
-    }
-
-    .btn-group {
-        display: flex;
-        gap: 0.5rem;
-        margin-top: auto;
-    }
+    .btn-group { display: flex; gap: 0.5rem; margin-top: auto; padding-top: 0.75rem; }
 
     .open-btn, .source-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
+      display: inline-flex; align-items: center; gap: 0.5rem;
       padding: 0.55rem 0.8rem;
-      font-family: 'DM Mono', monospace;
-      font-size: 0.62rem;
-      letter-spacing: 0.05em;
-      text-transform: uppercase;
-      text-decoration: none;
-      transition: all 0.2s ease;
+      font-family: 'DM Mono', monospace; font-size: 0.62rem;
+      letter-spacing: 0.05em; text-transform: uppercase;
+      text-decoration: none; transition: all 0.2s ease;
     }
-
-    .open-btn {
-      color: #fff;
-      background: var(--accent);
-      border: 1px solid var(--accent);
-    }
-
+    .open-btn { color: #fff; background: var(--accent); border: 1px solid var(--accent); }
     .open-btn:hover { background: var(--text); border-color: var(--text); }
-
-    .source-btn {
-      color: var(--muted);
-      border: 1px solid var(--border);
-      background: transparent;
-    }
-
+    .source-btn { color: var(--muted); border: 1px solid var(--border); background: transparent; }
     .source-btn:hover { border-color: var(--accent); color: var(--accent); }
-
     .open-btn svg, .source-btn svg { width: 10px; height: 10px; }
 
-    /* Modal Styling */
-    .modal-overlay {
-        position: fixed;
-        inset: 0;
-        background: rgba(26, 23, 20, 0.8);
-        backdrop-filter: blur(4px);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-        padding: 2rem;
+    /* ── GALLERY SECTION LABELS ── */
+    .section-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.9rem 0 0.6rem;
+      margin-top: 0.25rem;
+    }
+    .section-label-left {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+      flex-wrap: wrap;
+    }
+    .section-title {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.63rem;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+    }
+    .section-count {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+    .section-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.7rem;
+      white-space: nowrap;
+    }
+    .section-pill--integrated {
+      background: #eaf5ee;
+      color: #2d7a4f;
+      border: 1px solid #b6ddc6;
+    }
+    .section-pill--ext {
+      background: #f5f0e8;
+      color: #8a6a2a;
+      border: 1px solid #ddd0b0;
     }
 
-    .modal-content {
-        background: var(--surface);
-        max-width: 500px;
-        width: 100%;
-        padding: 3rem;
-        position: relative;
-        animation: fadeUp 0.4s ease;
+    /* ── EXTENSION INFO BAR ── */
+    .ext-info-bar {
+      margin-top: 3rem;
+      border: 1px solid #ddd0b0;
+      background: #faf7f0;
+      padding: 1.1rem 1.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1.5rem;
+      flex-wrap: wrap;
     }
-
-    .modal-content h2 { margin-bottom: 1.5rem; font-size: 1.8rem; }
-    
-    .modal-content ol {
-        font-family: 'DM Mono', monospace;
-        font-size: 0.85rem;
-        color: var(--text);
-        list-style-position: inside;
-        line-height: 2;
+    .ext-info-left {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.9rem;
+      flex: 1;
     }
-
-    .modal-content li::marker { color: var(--accent); font-weight: bold; }
-
-    .close-modal {
-        position: absolute;
-        top: 1.5rem;
-        right: 1.5rem;
-        background: none;
-        border: none;
-        font-family: 'DM Mono', monospace;
-        cursor: pointer;
-        color: var(--muted);
-        text-transform: uppercase;
-        font-size: 0.7rem;
+    .ext-info-icon {
+      width: 32px; height: 32px;
+      background: #f0e6cc;
+      border: 1px solid #ddd0b0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      color: #8a6a2a;
     }
-
-    @keyframes fadeDown {
-      from { opacity: 0; transform: translateY(-16px); }
-      to   { opacity: 1; transform: translateY(0); }
+    .ext-info-text {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
     }
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(24px); }
-      to   { opacity: 1; transform: translateY(0); }
+    .ext-info-text strong {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #6b4e1a;
     }
-
-    footer {
-      margin-top: 4rem;
-      padding: 1.75rem 3rem;
-      border-top: 1px solid var(--border);
+    .ext-info-text span {
       font-family: 'DM Mono', monospace;
       font-size: 0.62rem;
       color: var(--muted);
-      letter-spacing: 0.07em;
+      line-height: 1.65;
+      max-width: 620px;
+    }
+    .ext-install-btn {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.64rem;
+      background: #6b4e1a;
+      color: #fdf8ee;
+      border: none;
+      padding: 0.55rem 1.1rem;
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      transition: opacity 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 0.45rem;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .ext-install-btn:hover { opacity: 0.82; }
+
+    /* ── MODAL ── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(26,23,20,0.8);
+      backdrop-filter: blur(4px);
+      display: none; align-items: center; justify-content: center;
+      z-index: 1000; padding: 2rem;
+    }
+    .modal-content {
+      background: var(--surface); max-width: 480px; width: 100%;
+      padding: 3rem; position: relative; animation: fadeUp 0.4s ease;
+    }
+    .modal-content h2 { margin-bottom: 1.5rem; font-size: 1.7rem; }
+    .modal-content ol {
+      font-family: 'DM Mono', monospace; font-size: 0.82rem;
+      color: var(--text); list-style-position: inside; line-height: 2.1;
+    }
+    .modal-content li::marker { color: var(--accent); font-weight: bold; }
+    .modal-note {
+      font-family: 'DM Mono', monospace; font-size: 0.63rem;
+      color: var(--muted); line-height: 1.7;
+      border-top: 1px solid var(--border);
+      margin-top: 1.5rem; padding-top: 1.25rem;
+    }
+    .close-modal {
+      position: absolute; top: 1.5rem; right: 1.5rem;
+      background: none; border: none;
+      font-family: 'DM Mono', monospace; cursor: pointer;
+      color: var(--muted); text-transform: uppercase; font-size: 0.7rem;
+    }
+
+    @media (max-width: 900px) {
+      .about-top { grid-template-columns: 1fr; }
+      .about-features { grid-template-columns: 1fr 1fr; }
+      .feature-item { border-right: none; border-bottom: 1px solid var(--border); }
+      .feature-item:nth-child(odd) { border-right: 1px solid var(--border); }
+      .demo-main { grid-template-columns: 1fr; }
+      .how-steps { flex-direction: row; border-left: none; border-top: 1px solid var(--border); }
+      .step-item { border-bottom: none; border-right: 1px solid var(--border); }
+      .step-item:last-child { border-right: none; }
+    }
+
+    @media (max-width: 640px) {
+      header { height: auto; padding: 0 1.5rem; flex-wrap: wrap; }
+      .logo { padding: 1rem 0; border-bottom: 1px solid var(--border); width: 100%; }
+      .tabs { border-left: none; width: 100%; }
+      .tab-btn { flex: 1; text-align: center; padding: 0.85rem 0; }
+      .about-features { grid-template-columns: 1fr; }
+      .feature-item { border-right: none !important; }
+      .gallery-wrap, .demo-wrap { padding: 2rem 1.5rem; }
+      .how-steps { flex-direction: column; }
+      .step-item { border-right: none !important; border-bottom: 1px solid var(--border) !important; }
     }
   </style>
 </head>
 <body>
 
 <header>
-  <div class="header-left">
-    <h1><em>VizPilot</em> Gallery</h1>
-    <p>A curated collection of composite visualization systems</p>
+  <div class="logo"><em>Viz</em>Pilot</div>
+
+  <nav class="tabs">
+    <button class="tab-btn active" data-tab="about">About</button>
+    <button class="tab-btn" data-tab="demo">Demo</button>
+    <button class="tab-btn" data-tab="gallery">Gallery</button>
+  </nav>
+</header>
+
+<!-- ══ ABOUT ══ -->
+<div class="tab-panel active" id="tab-about">
+  <div class="about-wrap">
+
+    <!-- Top: description -->
+    <div class="about-top">
+      <div>
+        <!-- <div class="eyebrow">Research Paper</div> -->
+        <h1><em>VizPilot:</em> Automated Onboarding for SVG-based Composite Visualizations<br>using Multimodal LLMs</h1>
+      </div>
+      <div>
+        <p class="description">
+          Composite visualizations are expressive and powerful — but they impose a
+          <strong>high cognitive load</strong> on first-time users. Existing onboarding tools
+          are platform-dependent, require manual effort, and break down when faced with
+          structurally complex multi-view designs.
+          <br><br>
+          <strong>VizPilot</strong> takes a different approach: it reverse-engineers composite
+          visualization structure directly from raw SVG artifacts. A two-stage Composite Visualization Analyzer powered
+          by Multimodal LLMs decomposes each visualization into individual components, extracts
+          structured semantic knowledge, and anchors explanations to precise SVG elements via
+          hierarchical DOM traversal — all automatically, with no authoring required.
+          <br><br>
+          The resulting onboarding interface supports <strong>Narrative Scrollytelling</strong>
+          — guided, step-by-step walkthroughs with synchronized highlighting — and
+          <strong>Free Exploration</strong> for user-driven inquiry. Deployed as a browser
+          extension, VizPilot works across any SVG-based composite visualization.
+        </p>
+      </div>
+    </div>
+
+    <!-- Bottom: 4 features in a row
+    <div class="about-features">
+      <div class="feature-item">
+        <div class="fi-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="fi-text">
+          <h4>Multimodal LLM Pipeline</h4>
+          <p>A two-stage analyzer — Semantic Inference then Semantic Mapping — uses MLLMs to decompose composite visualizations into structured, mapped explainable units.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="fi-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+        </div>
+        <div class="fi-text">
+          <h4>Narrative Scrollytelling</h4>
+          <p>Guided, step-by-step walkthroughs with synchronized SVG highlighting orient users through complex layouts in a structured, story-driven flow.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="fi-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+        </div>
+        <div class="fi-text">
+          <h4>Free Exploration Mode</h4>
+          <p>Beyond guided tours, users can interrogate any element of a visualization on demand — enabling curiosity-driven, self-paced discovery.</p>
+        </div>
+      </div>
+      <div class="feature-item">
+        <div class="fi-icon">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+        </div>
+        <div class="fi-text">
+          <h4>Zero Authoring Effort</h4>
+          <p>A developer provides only a brief description and optional interaction code. VizPilot extracts the SVG, generates reasoning input, and builds the full onboarding tour automatically.</p>
+        </div>
+      </div>
+    </div> -->
+
   </div>
-  <div class="count-badge" id="count-badge">— visualizations</div>
-  <div class="header-right">
-     <button class="download-btn" onclick="handleDownloadAndInstructions()">
+</div>
+
+<!-- ══ DEMO ══ -->
+<div class="tab-panel" id="tab-demo">
+  <div class="demo-wrap">
+    <div class="eyebrow">How It Works</div>
+    <h2>Automated onboarding<br><em>in action</em></h2>
+    <p class="demo-desc">
+      This video walks through how VizPilot takes a composite visualization and automatically
+      produces a guided onboarding tour — from structure analysis through to the final
+      step-by-step overlay a user would experience.
+    </p>
+
+    <!-- Video + steps side by side -->
+    <!-- <div class="demo-main">
+      <div class="video-container">
+  <video controls autoplay muted loop>
+    <source src="demo_video.mp4" type="video/mp4">
+    Your browser does not support the video tag.
+  </video>
+</div>
+      </div> -->
+
+      <div class="demo-main">
+  <div class="video-container">
+    <video controls width="100%" poster="optional-thumbnail.jpg">
+      <source src="demo_video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+    </video>
+  </div>
+</div>
+
+      <!-- <div class="how-steps">
+        <div class="step-item">
+          <div class="step-num">01</div>
+          <h5>Structure Analysis</h5>
+          <p>VizPilot parses the visualization's DOM and component graph to identify distinct views and interactive elements.</p>
+        </div>
+        <div class="step-item">
+          <div class="step-num">02</div>
+          <h5>Step Extraction</h5>
+          <p>Key components are ranked by importance and sequenced into a logical onboarding order.</p>
+        </div>
+        <div class="step-item">
+          <div class="step-num">03</div>
+          <h5>Description Generation</h5>
+          <p>Each step receives an auto-generated description explaining the element's role in the visualization.</p>
+        </div>
+        <div class="step-item">
+          <div class="step-num">04</div>
+          <h5>Tour Playback</h5>
+          <p>The result is a replayable guided tour, viewable via the companion viewer extension on any supported visualization.</p>
+        </div>
+      </div> -->
+    </div>
+
+  </div>
+</div>
+
+<!-- ══ GALLERY ══ -->
+<div class="tab-panel" id="tab-gallery">
+  <div class="gallery-wrap">
+
+    <!-- Header -->
+    <div class="gallery-top">
+      <h2>Visualization <em>Gallery</em></h2>
+      <div class="gallery-top-right">
+        <span class="count-badge" id="count-badge">— visualizations</span>
+        
+      </div>
+    </div>
+
+    <!-- ── SECTION 1: Integrated onboarding ── -->
+    <div class="section-label">
+      <div class="section-label-left">
+        <span class="section-pill section-pill--integrated">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
+          Onboarding Integrated
+        </span>
+        <span class="section-title">Open directly in your browser, onboarding is built in.</span>
+      </div>
+      <span class="section-count" id="integrated-count"></span>
+    </div>
+
+    <div class="gallery" id="gallery-integrated">
+            <div class="card">
+        <div class="card-img">
+          <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <img src="images/Screenshot 2026-01-15 222413.png" alt="PrettiSmart" onerror="this.style.display='none'">
+          <span class="index-tag">04</span>
+        </div>
+        <div class="card-body">
+          <h3>PrettiSmart</h3>
+          <div class="btn-group">
+            <a class="open-btn" href="https://prettismart.onrender.com/" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+            <a class="source-btn" href="https://ieeexplore.ieee.org/document/11003921">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-img">
+          <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <img src="images/Screenshot 2026-02-16 195524.png" alt="RuleMatrix" onerror="this.style.display='none'">
+          <span class="index-tag">05</span>
+        </div>
+        <div class="card-body">
+          <h3>RuleMatrix</h3>
+          <div class="btn-group">
+            <a class="open-btn" href="http://localhost:8000/" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+            <a class="source-btn" href="https://ieeexplore.ieee.org/document/8440085">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="card">
+        <div class="card-img">
+          <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <img src="images/Screenshot 2026-03-30 230438.png" alt="Mixed Bar and Staggered Line" onerror="this.style.display='none'">
+          <span class="index-tag">11</span>
+        </div>
+        <div class="card-body">
+          <h3>Mixed Bar and Staggered Line</h3>
+          <div class="btn-group">
+            <a class="open-btn" href="html_files/mixedbar_staggeredline.html" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+            <a class="source-btn" href="https://www.zingchart.com/gallery/mixed-bar-line-staggered">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-img">
+          <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <img src="images/Screenshot 2026-03-05 213537.png" alt="CandleStick" onerror="this.style.display='none'">
+          <span class="index-tag">13</span>
+        </div>
+        <div class="card-body">
+          <h3>ShangHai Index</h3>
+          <div class="btn-group">
+            <a class="open-btn" href="html_files/candlestick-sh.html" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+            <a class="source-btn" href="https://echarts.apache.org/examples/en/editor.html?c=candlestick-sh">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-img">
+          <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <img src="images/Screenshot 2026-03-05 221904.png" alt="A Timeline of Media-Inflamed Fears" onerror="this.style.display='none'">
+          <span class="index-tag">15</span>
+        </div>
+        <div class="card-body">
+          <h3>A Timeline of Media-Inflamed Fears</h3>
+          <div class="btn-group">
+            <a class="open-btn" href="html_files/zingchart_1.html" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+            <a class="source-btn" href="https://www.zingchart.com/gallery/multiple-area-charts-with-shared-crosshair">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-img">
+          <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <img src="images/Screenshot 2025-12-15 182533.png" alt="Label Mania Dashboard" onerror="this.style.display='none'">
+          <span class="index-tag">16</span>
+        </div>
+        <div class="card-body">
+          <h3>Label Mania Dashboard</h3>
+          <div class="btn-group">
+            <a class="open-btn" href="html_files/multiple_bar_line.html" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+            <a class="source-btn" href="https://www.zingchart.com/gallery/label-mania-dashboard">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-img">
+          <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <img src="images/Screenshot 2026-01-23 134458.png" alt="PonziLens+" onerror="this.style.display='none'">
+          <span class="index-tag">06</span>
+        </div>
+        <div class="card-body">
+          <h3>PonziLens+</h3>
+          <div class="btn-group">
+            <a class="open-btn" href="https://cozy-cactus-ecc898.netlify.app/" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+            <a class="source-btn" href="https://ieeexplore.ieee.org/document/10794804">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-img">
+          <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <img src="images/Screenshot 2026-03-05 221841.png" alt="Multiple Time Series" onerror="this.style.display='none'">
+          <span class="index-tag">17</span>
+        </div>
+        <div class="card-body">
+          <h3>Multiple Time Series</h3>
+          <div class="btn-group">
+            <a class="open-btn" href="html_files/multiple_time_series.html" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+            <a class="source-btn" href="https://www.zingchart.com/gallery/multiple-time-series-scales">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-img">
+          <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <img src="images/Screenshot 2026-03-05 220130.png" alt="CandleStick on Mobile" onerror="this.style.display='none'">
+          <span class="index-tag">18</span>
+        </div>
+        <div class="card-body">
+          <h3>CandleStick on Mobile</h3>
+          <div class="btn-group">
+            <a class="open-btn" href="html_files/candlestick-touch.html" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+            <a class="source-btn" href="https://echarts.apache.org/examples/en/editor.html?c=candlestick-touch">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── SECTION 2: Extension required ── -->
+    <div class="ext-info-bar">
+      <div class="ext-info-left">
+        <div class="ext-info-icon">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+        </div>
+        <div class="ext-info-text">
+          <strong>Extension Required</strong>
+          <span>These visualizations are hosted externally and cannot be modified. To view the VizPilot onboarding tour, download and add the browser extension and it injects the onboarding directly into any supported page.</span>
+        </div>
+      </div>
+<button class="download-btn" onclick="handleDownloadAndInstructions()">
     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4M7 10l5 5 5-5M12 15V3"/>
     </svg>
     Download Extension
 </button>
-  </div>
-</header>
-
-<main>
-  <div class="gallery" id="gallery">
-    
-
-    <div class="card">
-      <div class="card-img">
-        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <img src="images/Screenshot 2026-02-23 172410.png" alt="Matrix Wave" onerror="this.style.display='none'">
-        <span class="index-tag">01</span>
-      </div>
-      <div class="card-body">
-        <h3>Matrix Wave Visualization</h3>
-        <p></p>
-        <div class="btn-group">
-            <a class="open-btn" href="https://www.jeffjianzhao.com/webapp/MatrixWave/matrixwave.html" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
-            <a class="source-btn" href="https://dl.acm.org/doi/10.1145/2702123.2702419">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
-        </div>
-        
-      </div>
     </div>
 
-    <div class="card">
-      <div class="card-img">
-        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <img src="images/Screenshot 2026-02-18 134926.png" alt="VIStory" onerror="this.style.display='none'">
-        <span class="index-tag">02</span>
+    <div class="section-label section-label--ext">
+      <div class="section-label-left">
+        <span class="section-pill section-pill--ext">
+          <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4M10 17l5-5-5-5M15 12H3"/></svg>
+          Requires Extension
+        </span>
+        <span class="section-title">Open the visualization, then activate the VizPilot extension to view the onboarding results.</span>
       </div>
-      <div class="card-body">
-        <h3>VIStory</h3>
-        <p></p>
-        <div class="btn-group">
-            <a class="open-btn" href="https://dongoa.github.io/VIStory/" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
-            <a class="source-btn" href="https://dl.acm.org/doi/10.1145/3356422.3356430">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
-        </div>
-      </div>
+      <span class="section-count" id="ext-count"></span>
+      
     </div>
 
-    <div class="card">
-      <div class="card-img">
-        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <img src="images/Screenshot 2025-12-09 130751.png" alt="DIFFSEER" onerror="this.style.display='none'">
-        <span class="index-tag">03</span>
-      </div>
-      <div class="card-body">
-        <h3>DIFFSEER</h3>
-        
-        <div class="btn-group">
-            <a class="open-btn" href="https://diffseer.github.io/" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
-            <a class="source-btn" href="https://ieeexplore.ieee.org/document/10078374">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-img">
-        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <img src="images/Screenshot 2026-01-15 222413.png" alt="PrettiSmart" onerror="this.style.display='none'">
-        <span class="index-tag">04</span>
-      </div>
-      <div class="card-body">
-        <h3>PrettiSmart</h3>
-        
-        <div class="btn-group">
-            <a class="open-btn" href="https://prettismart.onrender.com/" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
-            <a class="source-btn" href="https://ieeexplore.ieee.org/document/11003921">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-img">
-        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <img src="images/Screenshot 2026-02-16 195524.png" alt="RuleMatrix" onerror="this.style.display='none'">
-        <span class="index-tag">05</span>
-      </div>
-      <div class="card-body">
-        <h3>RuleMatrix</h3>
-        
-        <div class="btn-group">
-            <a class="open-btn" href="http://localhost:8000/" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
-            <a class="source-btn" href="https://ieeexplore.ieee.org/document/8440085">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-img">
-        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <img src="images/Screenshot 2026-01-23 134458.png" alt="PonziLens+" onerror="this.style.display='none'">
-        <span class="index-tag">06</span>
-      </div>
-      <div class="card-body">
-        <h3>PonziLens+</h3>
-        
-        <div class="btn-group">
-            <a class="open-btn" href="https://cozy-cactus-ecc898.netlify.app/" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
-            <a class="source-btn" href="https://ieeexplore.ieee.org/document/10794804">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
-        </div>
-      </div>
-    </div>
-
-    <div class="card">
-      <div class="card-img">
-        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <img src="images/Screenshot 2026-02-06 200807.png" alt="EgoLines" onerror="this.style.display='none'">
-        <span class="index-tag">07</span>
-      </div>
-      <div class="card-body">
-        <h3>EgoLines</h3>
-        
-        <div class="btn-group">
-            <a class="open-btn" href="https://www.jeffjianzhao.com/webapp/EgoLines/egolines-demo.html" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
-            <a class="source-btn" href="https://dl.acm.org/doi/10.1145/2858036.2858488">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="card">
-      <div class="card-img">
-        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <img src="images/Screenshot 2026-02-18 141949.png" alt="AttentionFlow" onerror="this.style.display='none'">
-        <span class="index-tag">08</span>
-      </div>
-      <div class="card-body">
-        <h3>AttentionFlow</h3>
-        
-        <div class="btn-group">
-            <a class="open-btn" href="https://attentionflow.cmlab.dev/#/overview/artist/UComP_epzeKzvBX156r6pm1Q" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
-            <a class="source-btn" href="https://dl.acm.org/doi/10.1145/3442381.3449945">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
-        </div>
-      </div>
-    </div>
+    <div class="gallery" id="gallery-ext">
 
       <div class="card">
-      <div class="card-img">
-        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <img src="images/Screenshot 2026-01-17 184110.png" alt="QuantumEyes" onerror="this.style.display='none'">
-        <span class="index-tag">14</span>
-      </div>
-      <div class="card-body">
-        <h3>QuantumEyes</h3>
-        <div class="btn-group">
-            <a class="open-btn" href="https://quantumeyes.github.io/" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
-            <a class="source-btn" href="https://ieeexplore.ieee.org/document/10319321">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+        <div class="card-img">
+          <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <img src="images/Screenshot 2026-02-23 172410.png" alt="Matrix Wave" onerror="this.style.display='none'">
+          <span class="index-tag">01</span>
+        </div>
+        <div class="card-body">
+          <h3>Matrix Wave Visualization</h3>
+          <div class="btn-group">
+            <a class="open-btn" href="https://www.jeffjianzhao.com/webapp/MatrixWave/matrixwave.html" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+            <a class="source-btn" href="https://dl.acm.org/doi/10.1145/2702123.2702419">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+          </div>
         </div>
       </div>
-    </div>
 
-    
-    <div class="card">
-      <div class="card-img">
-        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <img src="images/Screenshot 2026-03-05 221841.png" alt="Multiple Time Series" onerror="this.style.display='none'">
-        <span class="index-tag">17</span>
-      </div>
-      <div class="card-body">
-        <h3>Multiple Time Series</h3>
-        
-        <div class="btn-group">
-            <a class="open-btn" href="html_files/multiple_time_series.html" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
-            <a class="source-btn" href="https://www.zingchart.com/gallery/multiple-time-series-scales">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+      <div class="card">
+        <div class="card-img">
+          <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <img src="images/Screenshot 2026-02-18 134926.png" alt="VIStory" onerror="this.style.display='none'">
+          <span class="index-tag">02</span>
+        </div>
+        <div class="card-body">
+          <h3>VIStory</h3>
+          <div class="btn-group">
+            <a class="open-btn" href="https://dongoa.github.io/VIStory/" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+            <a class="source-btn" href="https://dl.acm.org/doi/10.1145/3356422.3356430">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+          </div>
         </div>
       </div>
-    </div>
 
-    
-    <div class="card">
-      <div class="card-img">
-        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <img src="images/Screenshot 2025-12-15 182533.png" alt="Label Mania Dashboard" onerror="this.style.display='none'">
-        <span class="index-tag">16</span>
-      </div>
-      <div class="card-body">
-        <h3>Label Mania Dashboard</h3>
-        
-        <div class="btn-group">
-            <a class="open-btn" href="html_files/multiple_bar_line.html" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
-            <a class="source-btn" href="https://www.zingchart.com/gallery/label-mania-dashboard">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+      <div class="card">
+        <div class="card-img">
+          <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <img src="images/Screenshot 2025-12-09 130751.png" alt="DIFFSEER" onerror="this.style.display='none'">
+          <span class="index-tag">03</span>
+        </div>
+        <div class="card-body">
+          <h3>DIFFSEER</h3>
+          <div class="btn-group">
+            <a class="open-btn" href="https://diffseer.github.io/" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+            <a class="source-btn" href="https://ieeexplore.ieee.org/document/10078374">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+          </div>
         </div>
       </div>
-    </div>
 
-        <div class="card">
-      <div class="card-img">
-        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <img src="images/Screenshot 2026-02-06 114517.png" alt="PEARL" onerror="this.style.display='none'">
-        <span class="index-tag">12</span>
-      </div>
-      <div class="card-body">
-        <h3>PEARL</h3>
 
-        <div class="btn-group">
-            <a class="open-btn" href="https://www.jeffjianzhao.com/webapp/Pearl/pearl.html" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
-            <a class="source-btn" href="https://ieeexplore.ieee.org/document/7042496">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+
+      <div class="card">
+        <div class="card-img">
+          <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <img src="images/Screenshot 2026-02-06 200807.png" alt="EgoLines" onerror="this.style.display='none'">
+          <span class="index-tag">07</span>
         </div>
-      
-      </div>
-    </div>
-
-        <div class="card">
-      <div class="card-img">
-        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <img src="images/Screenshot 2026-02-18 162452.png" alt="Dodrio" onerror="this.style.display='none'">
-        <span class="index-tag">10</span>
-      </div>
-      <div class="card-body">
-        <h3>Dodrio</h3>
-
-        <div class="btn-group">
-            <a class="open-btn" href="https://poloclub.github.io/dodrio/" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
-            <a class="source-btn" href="https://poloclub.github.io/papers/21-acl-dodrio.pdf">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+        <div class="card-body">
+          <h3>EgoLines</h3>
+          <div class="btn-group">
+            <a class="open-btn" href="https://www.jeffjianzhao.com/webapp/EgoLines/egolines-demo.html" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+            <a class="source-btn" href="https://dl.acm.org/doi/10.1145/2858036.2858488">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+          </div>
         </div>
       </div>
-    </div>
 
-        
-
-    <div class="card">
-      <div class="card-img">
-        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <img src="images/Screenshot 2026-03-30 230438.png" alt="Mixed Bar and Staggered Line" onerror="this.style.display='none'">
-        <span class="index-tag">11</span>
-      </div>
-      <div class="card-body">
-        <h3>Mixed Bar and Staggered Line</h3>
-        
-        <div class="btn-group">
-            <a class="open-btn" href="html_files/mixedbar_staggeredline.html" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
-            <a class="source-btn" href="https://www.zingchart.com/gallery/mixed-bar-line-staggered">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+      <div class="card">
+        <div class="card-img">
+          <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <img src="images/Screenshot 2026-02-18 141949.png" alt="AttentionFlow" onerror="this.style.display='none'">
+          <span class="index-tag">08</span>
+        </div>
+        <div class="card-body">
+          <h3>AttentionFlow</h3>
+          <div class="btn-group">
+            <a class="open-btn" href="https://attentionflow.cmlab.dev/#/overview/artist/UComP_epzeKzvBX156r6pm1Q" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+            <a class="source-btn" href="https://dl.acm.org/doi/10.1145/3442381.3449945">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+          </div>
         </div>
       </div>
-    </div>
 
-    
-
-    <div class="card">
-      <div class="card-img">
-        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <img src="images/Screenshot 2026-03-05 213537.png" alt="CandleStick" onerror="this.style.display='none'">
-        <span class="index-tag">13</span>
-      </div>
-      <div class="card-body">
-        <h3>ShangHai Index</h3>
-        
-        <div class="btn-group">
-            <a class="open-btn" href="html_files/candlestick-sh.html" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
-            <a class="source-btn" href="https://echarts.apache.org/examples/en/editor.html?c=candlestick-sh">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+      <div class="card">
+        <div class="card-img">
+          <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <img src="images/Screenshot 2026-02-17 175944.png" alt="UpSet" onerror="this.style.display='none'">
+          <span class="index-tag">09</span>
         </div>
-      </div>
-    </div>
-
-  
-    <div class="card">
-      <div class="card-img">
-        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <img src="images/Screenshot 2026-03-05 221904.png" alt="A Timeline of Media-Inflamed Fears" onerror="this.style.display='none'">
-        <span class="index-tag">15</span>
-      </div>
-      <div class="card-body">
-        <h3>A Timeline of Media-Inflamed Fears</h3>
-        
-        <div class="btn-group">
-            <a class="open-btn" href="html_files/zingchart_1.html" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
-            <a class="source-btn" href="https://www.zingchart.com/gallery/multiple-area-charts-with-shared-crosshair">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
-        </div>
-      </div>
-    </div>
-
-
-
-    <div class="card">
-      <div class="card-img">
-        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <img src="images/Screenshot 2026-03-05 220130.png" alt="CandleStick on Mobile" onerror="this.style.display='none'">
-        <span class="index-tag">18</span>
-      </div>
-      <div class="card-body">
-        <h3>CandleStick on Mobile</h3>
-        
-        <div class="btn-group">
-            <a class="open-btn" href="html_files/candlestick-touch.html" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
-            <a class="source-btn" href="https://echarts.apache.org/examples/en/editor.html?c=candlestick-touch">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
-        </div>
-      </div>
-    </div>
-
-
-    <div class="card">
-      <div class="card-img">
-        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <img src="images/Screenshot 2026-02-17 175944.png" alt="UpSet" onerror="this.style.display='none'">
-        <span class="index-tag">09</span>
-      </div>
-      <div class="card-body">
-        <h3>UpSet</h3>
-        
-        <div class="btn-group">
+        <div class="card-body">
+          <h3>UpSet</h3>
+          <div class="btn-group">
             <a class="open-btn" href="https://vcg.github.io/upset/" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
             <a class="source-btn" href="https://ieeexplore.ieee.org/document/6876017">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+          </div>
         </div>
       </div>
-    </div>
 
-
-
-
-
-    
-
-    <!-- ─── TEMPLATE ───
-    <div class="card">
-      <div class="card-img">
-        <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-        <img src="YOUR_IMAGE.png" alt="Your Title" onerror="this.style.display='none'">
-        <span class="index-tag">07</span>
+      <div class="card">
+        <div class="card-img">
+          <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <img src="images/Screenshot 2026-02-18 162452.png" alt="Dodrio" onerror="this.style.display='none'">
+          <span class="index-tag">10</span>
+        </div>
+        <div class="card-body">
+          <h3>Dodrio</h3>
+          <div class="btn-group">
+            <a class="open-btn" href="https://poloclub.github.io/dodrio/" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+            <a class="source-btn" href="https://poloclub.github.io/papers/21-acl-dodrio.pdf">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+          </div>
+        </div>
       </div>
-      <div class="card-body">
-        <h3>Your Visualization Title</h3>
-        <p>Short description.</p>
-        <a class="open-btn" href="YOUR_URL" target="_blank">
-          Open Visualization
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg>
-        </a>
+
+      <div class="card">
+        <div class="card-img">
+          <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <img src="images/Screenshot 2026-02-06 114517.png" alt="PEARL" onerror="this.style.display='none'">
+          <span class="index-tag">12</span>
+        </div>
+        <div class="card-body">
+          <h3>PEARL</h3>
+          <div class="btn-group">
+            <a class="open-btn" href="https://www.jeffjianzhao.com/webapp/Pearl/pearl.html" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+            <a class="source-btn" href="https://ieeexplore.ieee.org/document/7042496">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+          </div>
+        </div>
       </div>
+
+      <div class="card">
+        <div class="card-img">
+          <div class="placeholder"><svg viewBox="0 0 24 24" fill="none" stroke="#888" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+          <img src="images/Screenshot 2026-01-17 184110.png" alt="QuantumEyes" onerror="this.style.display='none'">
+          <span class="index-tag">14</span>
+        </div>
+        <div class="card-body">
+          <h3>QuantumEyes</h3>
+          <div class="btn-group">
+            <a class="open-btn" href="https://quantumeyes.github.io/" target="_blank">Open <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17L17 7M7 7h10v10"/></svg></a>
+            <a class="source-btn" href="https://ieeexplore.ieee.org/document/10319321">Source <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M16 12l-4-4-4 4M12 16V9"/></svg></a>
+          </div>
+        </div>
+      </div>
+
     </div>
-    ─── END TEMPLATE ─── -->
 
   </div>
-</main>
-
-<div class="modal-overlay" id="instructionModal" onclick="closeModal()">
-    <div class="modal-content" onclick="event.stopPropagation()">
-        <button class="close-modal" onclick="closeModal()">Close [x]</button>
-        <h2>Installation</h2>
-        <ol>
-            <li>Download the extension ZIP</li>
-            <li>Unzip the file locally</li>
-            <li>Go to <code>chrome://extensions</code></li>
-            <li>Enable "Developer mode" (top right)</li>
-            <li>Click "Load unpacked"</li>
-            <li>Select the unzipped folder</li>
-        </ol>
-    </div>
 </div>
 
-<footer>
-  Composite Visualization Gallery — duplicate a card block in the HTML to add more.
-</footer>
-
-<!-- <script>
-  const cards = document.querySelectorAll('.card');
-  const badge = document.getElementById('count-badge');
-  badge.textContent = `${cards.length} visualization${cards.length !== 1 ? 's' : ''}`;
-  cards.forEach((card, i) => {
-    const tag = card.querySelector('.index-tag');
-    if (tag) tag.textContent = String(i + 1).padStart(2, '0');
-  });
-</script> -->
+<!-- ── INSTALL MODAL ── -->
+<div class="modal-overlay" id="installModal" onclick="closeModal()">
+  <div class="modal-content" onclick="event.stopPropagation()">
+    <button class="close-modal" onclick="closeModal()">Close [x]</button>
+    <h2>Install Viewer</h2>
+    <ol>
+      <li>Download and unzip the file</li>
+      <li>Go to <code>chrome://extensions</code></li>
+      <li>Enable "Developer mode" (top right)</li>
+      <li>Click "Load unpacked"</li>
+      <li>Select the unzipped folder</li>
+      <li>Open any visualization in the gallery</li>
+    </ol>
+    <p class="modal-note">
+      This extension replays <strong>pre-generated</strong> VizPilot onboarding tours.
+      It does not include the automated authoring pipeline — see the <strong>Demo</strong> tab to learn how tours are created.
+    </p>
+  </div>
+</div>
 
 <script>
-  // Dynamic counter and index tagging
-  const cards = document.querySelectorAll('.card');
-  const badge = document.getElementById('count-badge');
-  badge.textContent = `${cards.length} visualization${cards.length !== 1 ? 's' : ''}`;
-  
-  cards.forEach((card, i) => {
-    const tag = card.querySelector('.index-tag');
-    if (tag) tag.textContent = String(i + 1).padStart(2, '0');
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
   });
 
-  // Combined Download + Instruction Function
+  const intCards = document.querySelectorAll('#gallery-integrated .card');
+  const extCards = document.querySelectorAll('#gallery-ext .card');
+  const total = intCards.length + extCards.length;
+  document.getElementById('count-badge').textContent =
+    `${total} visualization${total !== 1 ? 's' : ''}`;
+  document.getElementById('integrated-count').textContent =
+    `${intCards.length} visualization${intCards.length !== 1 ? 's' : ''}`;
+  document.getElementById('ext-count').textContent =
+    `${extCards.length} visualization${extCards.length !== 1 ? 's' : ''}`;
+
   function handleDownloadAndInstructions() {
     const fileUrl = 'Vizpilot_extension.zip';
 
@@ -716,14 +1130,8 @@
     }, 300);
   }
 
-  function openModal() {
-    document.getElementById('instructionModal').style.display = 'flex';
-  }
-
-  function closeModal() {
-    document.getElementById('instructionModal').style.display = 'none';
-  }
-
+  function openModal()  { document.getElementById('installModal').style.display = 'flex'; }
+  function closeModal() { document.getElementById('installModal').style.display = 'none'; }
 </script>
 
 </body>
