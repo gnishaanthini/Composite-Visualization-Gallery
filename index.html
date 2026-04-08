@@ -603,30 +603,37 @@
 
     <!-- Top: description -->
     <div class="about-top">
-      <div>
-        <!-- <div class="eyebrow">Research Paper</div> -->
-        <h1><em>VizPilot:</em> Automated Onboarding for SVG-based Composite Visualizations<br>using Multimodal LLMs</h1>
-      </div>
-      <div>
-        <p class="description">
-          Composite visualizations are expressive and powerful — but they impose a
-          <strong>high cognitive load</strong> on first-time users. Existing onboarding tools
-          are platform-dependent, require manual effort, and break down when faced with
-          structurally complex multi-view designs.
-          <br><br>
-          <strong>VizPilot</strong> takes a different approach: it reverse-engineers composite
-          visualization structure directly from raw SVG artifacts. A two-stage Composite Visualization Analyzer powered
-          by Multimodal LLMs decomposes each visualization into individual components, extracts
-          structured semantic knowledge, and anchors explanations to precise SVG elements via
-          hierarchical DOM traversal — all automatically, with no authoring required.
-          <br><br>
-          The resulting onboarding interface supports <strong>Narrative Scrollytelling</strong>
-          — guided, step-by-step walkthroughs with synchronized highlighting — and
-          <strong>Free Exploration</strong> for user-driven inquiry. Deployed as a browser
-          extension, VizPilot works across any SVG-based composite visualization.
-        </p>
-      </div>
-    </div>
+  <div>
+    <h1><em>VizPilot:</em> Automated Onboarding for SVG-based Composite Visualizations<br>using Multimodal LLMs</h1>
+  </div>
+  <div>
+    <p class="description">
+      Composite visualizations are expressive and powerful — but they impose a
+      <strong>high cognitive load</strong> on first-time users. Existing onboarding tools
+      are platform-dependent, require manual effort, and break down when faced with
+      structurally complex multi-view designs.
+      <br><br>
+      <strong>VizPilot</strong> takes a different approach: it reverse-engineers composite
+      visualization structure directly from raw SVG artifacts. A two-stage Composite Visualization Analyzer powered
+      by Multimodal LLMs decomposes each visualization into individual components, extracts
+      structured semantic knowledge, and anchors explanations to precise SVG elements via
+      hierarchical DOM traversal — all automatically, with no authoring required.
+      <br><br>
+      The resulting onboarding interface offers two complementary modes of engagement:
+    </p>
+    
+    <ul class="modes-list" style="list-style: none; padding-left: 0;">
+      <li style="margin-bottom: 15px;">
+        <strong>Narrative Scrollytelling:</strong> Users follow a guided, linear path through the visualization. As they scroll through the narrative pane, <em>VizPilot</em> automatically triggers synchronized visual highlights, revealing the layout, encodings, and insights in a logically sequenced walkthrough.
+      </li>
+      <li>
+        <strong>Free Exploration:</strong> For user-driven inquiry, users can directly hover over any visual component. The system instantly retrieves and displays an overview about the component. Users can also use the Exploration Assistant chatbot to ask follow-up questions.
+      </li>
+    </ul>
+
+
+  </div>
+</div>
 
     <!-- Bottom: 4 features in a row
     <div class="about-features">
