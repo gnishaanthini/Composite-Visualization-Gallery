@@ -27,6 +27,38 @@
       overflow-x: hidden;
     }
 
+    /* Abstract block inside about-top */
+    .paper-abstract {
+      margin-top: 2.5rem;
+      text-align: left;
+    }
+    .paper-abstract h4 {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.63rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      margin-bottom: 1rem;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      gap: 0.7rem;
+    }
+    .paper-abstract h4::before,
+    .paper-abstract h4::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+    .paper-abstract p {
+      font-size: 0.95rem;
+      font-weight: 300;
+      line-height: 1.85;
+      color: var(--text);
+      text-align: justify;
+    }
+
     /* ── HEADER ── */
     header {
       padding: 0 3rem;
@@ -108,15 +140,102 @@
       min-height: calc(100vh - 56px);
     }
 
-    /* Top half: description */
+    /* Top half: centered column — title / authors / abstract / links */
     .about-top {
-      padding: 4rem 3rem 3rem;
+      padding: 4rem 3rem 3.5rem;
       border-bottom: 1px solid var(--border);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: center;
+      display: flex;
+      justify-content: center;
     }
+
+    .about-top-inner {
+      width: 100%;
+      max-width: 1080px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .venue-badge {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.63rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      border: 1px solid var(--accent);
+      background: var(--accent-light);
+      padding: 0.35rem 0.85rem;
+      display: inline-block;
+      margin-bottom: 1.4rem;
+    }
+
+    .authors-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.75rem 2.25rem;
+      margin-top: 1.75rem;
+    }
+
+    .author-card {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      text-align: left;
+    }
+
+    .author-avatar {
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: var(--accent-light);
+      border: 1px solid var(--border);
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--accent);
+    }
+    .author-avatar img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .author-avatar svg { width: 19px; height: 19px; opacity: 0.6; }
+
+    .author-info { display: flex; flex-direction: column; gap: 0.15rem; }
+    .author-info .author-name { font-size: 0.92rem; font-weight: 600; letter-spacing: -0.01em; }
+    .author-info .author-role {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.6rem;
+      color: var(--muted);
+      letter-spacing: 0.02em;
+      line-height: 1.5;
+    }
+
+    .paper-links {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 2rem;
+    }
+
+    .paper-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-family: 'DM Mono', monospace;
+      font-size: 0.68rem;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      text-decoration: none;
+      padding: 0.65rem 1.1rem;
+      transition: all 0.2s ease;
+    }
+    .paper-link-btn svg { width: 13px; height: 13px; }
+    .paper-link-btn.primary { background: var(--text); color: white; border: 1px solid var(--text); }
+    .paper-link-btn.primary:hover { background: var(--accent); border-color: var(--accent); }
+    .paper-link-btn.secondary { color: var(--muted); border: 1px solid var(--border); background: transparent; }
+    .paper-link-btn.secondary:hover { border-color: var(--accent); color: var(--accent); }
 
     .eyebrow {
       font-family: 'DM Mono', monospace;
@@ -137,11 +256,11 @@
     }
 
     .about-top h1 {
-      font-size: clamp(1.4rem, 2.2vw, 2rem);
+      font-size: clamp(1.6rem, 2.6vw, 2.15rem);
       font-weight: 800;
       letter-spacing: -0.03em;
-      line-height: 1.25;
-      margin-bottom: 1.5rem;
+      line-height: 1.3;
+      margin-bottom: 0;
     }
     .about-top h1 em {
       font-style: italic;
@@ -562,7 +681,7 @@
     }
 
     @media (max-width: 900px) {
-      .about-top { grid-template-columns: 1fr; }
+      .about-top { padding: 3rem 1.5rem 2.5rem; }
       .about-features { grid-template-columns: 1fr 1fr; }
       .feature-item { border-right: none; border-bottom: 1px solid var(--border); }
       .feature-item:nth-child(odd) { border-right: 1px solid var(--border); }
@@ -601,39 +720,98 @@
 <div class="tab-panel active" id="tab-about">
   <div class="about-wrap">
 
-    <!-- Top: description -->
+    <!-- Top: centered column — title / authors / abstract / links -->
     <div class="about-top">
-  <div>
-    <h1><em>VizPilot:</em> Automated Onboarding for SVG-based Composite Visualizations<br>using Multimodal LLMs</h1>
-  </div>
-  <div>
-    <p class="description">
-      Composite visualizations are expressive and powerful — but they impose a
-      <strong>high cognitive load</strong> on first-time users. Existing onboarding tools
-      are platform-dependent, require manual effort, and break down when faced with
-      structurally complex multi-view designs.
-      <br><br>
-      <strong>VizPilot</strong> takes a different approach: it reverse-engineers composite
-      visualization structure directly from raw SVG artifacts. A two-stage Composite Visualization Analyzer powered
-      by Multimodal LLMs decomposes each visualization into individual components, extracts
-      structured semantic knowledge, and anchors explanations to precise SVG elements via
-      hierarchical DOM traversal — all automatically, with no authoring required.
-      <br><br>
-      The resulting onboarding interface offers two complementary modes of engagement:
-    </p>
-    
-    <ul class="modes-list" style="list-style: none; padding-left: 0;">
-      <li style="margin-bottom: 15px;">
-        <strong>Narrative Scrollytelling:</strong> Users follow a guided, linear path through the visualization. As they scroll through the narrative pane, <em>VizPilot</em> automatically triggers synchronized visual highlights, revealing the layout, encodings, and insights in a logically sequenced walkthrough.
-      </li>
-      <li>
-        <strong>Free Exploration:</strong> For user-driven inquiry, users can directly hover over any visual component. The system instantly retrieves and displays an overview about the component. Users can also use the Exploration Assistant chatbot to ask follow-up questions.
-      </li>
-    </ul>
 
+      <div class="about-top-inner">
+        <!-- <span class="venue-badge">IEEE VIS 2026 · Conditionally Accepted</span> -->
 
-  </div>
-</div>
+        <h1><em>VizPilot:</em> Automated Onboarding for SVG-based Composite Visualizations using Multimodal LLMs</h1>
+
+        <!-- AUTHORS — replace name / role / university / avatar for each author -->
+        <div class="authors-row">
+          <div class="author-card">
+            <div class="author-avatar">
+              <!-- Replace with <img src="images/author1.jpg" alt="Author Name"> -->
+               <img src="images\Screenshot 2026-07-29 171940.png" alt="Nishaa">
+              <!-- <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0 1 14 0v1"/></svg> -->
+            </div>
+            <div class="author-info">
+              <span class="author-name">Nishaanthini Gnanavel</span>
+              <span class="author-role">PhD Student, CCDS, NTU</span>
+            </div>
+          </div>
+
+          <!-- <div class="author-card">
+            <div class="author-avatar">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0 1 14 0v1"/></svg>
+            </div>
+            <div class="author-info">
+              <span class="author-name">Co-Author Name</span>
+              <span class="author-role">PhD Student / Collaborator, CCDS, NTU</span>
+            </div>
+          </div> -->
+
+          <div class="author-card">
+            <div class="author-avatar">
+              <img src="images\Screenshot 2026-07-29 171945.png" alt="Nishaa">
+              <!-- <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21v-1a7 7 0 0 1 14 0v1"/></svg> -->
+            </div>
+            <div class="author-info">
+              <span class="author-name">Yong Wang</span>
+              <span class="author-role">Assistant Professor, CCDS, NTU</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="paper-abstract">
+          <h4>Abstract</h4>
+          <p>
+            Composite visualizations integrate multiple visualizations in a meaningful manner and show strong
+            expressiveness in representing complex datasets. They have been widely proposed by visualization
+            developers in different applications. However, they often impose a high initial cognitive load on
+            novice users, due to their intrinsic composite designs. Existing visualization onboarding approaches
+            have attempted to mitigate this issue, but they are typically platform-dependent, require substantial
+            manual authoring effort, and struggle with the structural complexity of composite visualizations,
+            making them unable to be used for general composite visualizations. In this paper, we present
+            VizPilot, a novel automated visualization onboarding approach that reverse-engineers composite
+            visualization structure to enable an interactive onboarding experience directly from raw visualization
+            artifacts. The proposed approach consists of two primary modules: the Composite Visualization Analyzer
+            and the Onboarding Interface. Leveraging Multimodal Large Language Models (MLLMs), the Analyzer
+            employs a two-stage pipeline: the Semantic Inference stage decomposes the visualization into
+            individual visual components and extracts structured knowledge using a five-category taxonomy to
+            generate atomic explanation units, and the Semantic Mapping stage anchors these explanations to
+            precise SVG elements via hierarchical DOM traversal, enabling reliable highlighting and interactions.
+            We implement VizPilot as a browser extension. To initiate the workflow, a visualization developer
+            provides a brief description and optional interaction source code, and VizPilot then automatically
+            extracts the SVG and generates a bitmap image to drive the multimodal reasoning. The interactive
+            Onboarding Interface then presents the structured outputs from the Composite Visualization Analyzer,
+            supporting both Narrative Scrollytelling, providing guided, step-by-step explanations with
+            synchronized highlighting, and Free Exploration for on-demand inquiry by users. We extensively
+            evaluate VizPilot through a comparative analysis of different input modalities to assess pipeline
+            robustness, a usage scenario to illustrate reduced authoring effort, and a user study to confirm its
+            effect in reducing users' cognitive load. The overall results demonstrate the effectiveness and
+            usability of VizPilot in facilitating easy onboarding of composite visualizations.
+          </p>
+        </div>
+
+        <div class="paper-links">
+          <a class="paper-link-btn primary" href="paper.pdf" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></svg>
+            Paper PDF
+          </a>
+          <!-- <a class="paper-link-btn secondary" href="#" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 18l6-6-6-6M8 6l-6 6 6 6"/></svg>
+            Code
+          </a>
+          <a class="paper-link-btn secondary" href="#" target="_blank">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 3H8v4h8V3z"/></svg>
+            BibTeX
+          </a> -->
+        </div>
+      </div>
+
+    </div>
 
     <!-- Bottom: 4 features in a row
     <div class="about-features">
